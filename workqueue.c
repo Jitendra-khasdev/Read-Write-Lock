@@ -83,6 +83,7 @@ void *master_thread()
 /*Entry Point*/
 int main()
 {
+	int num, val;
 	/*pthread_t thread[NTHREADS];
 	int i, j, n_thread;
 
@@ -103,34 +104,15 @@ int main()
 	printf("Modified data == %d\n", data);*/
 	struct work_queue_t *wq =  work_queue();
 
-	add_item(0, wq);
-	add_item(0, wq);
-	add_item(0, wq);
-	add_item(1, wq);
-	add_item(1, wq);
+	scanf("%d", &num);
+	while (num--) {
+		scanf("%d", &val);
+		add_item(val, wq);
+	}
 
 	display(wq);
 
-	remove_item(wq);
-	remove_item(wq);
-	remove_item(wq);
 	printf("\n");
-	display(wq);
-
-	remove_item(wq);
-	remove_item(wq);
-
-	printf("=====\n");
-	display(wq);
-	
-	printf("\n");
-
-	add_item(1, wq);
-	add_item(1, wq);
-	add_item(1, wq);
-	add_item(1, wq);
-	
-	display(wq);
 	return 0;
 }
 

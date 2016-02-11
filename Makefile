@@ -1,3 +1,5 @@
+# gcc -o queue workqueue.c  workqueue.h -lpthread
+
 HEADERS = workqueue.h
 LIBS = -lpthread
 

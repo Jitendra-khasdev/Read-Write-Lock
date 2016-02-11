@@ -102,16 +102,20 @@ int main()
 	}
 	
 	printf("Modified data == %d\n", data);*/
+	
+	/*Create a work to store work item into memory*/
 	struct work_queue_t *wq =  work_queue();
+
+	/*Create a thread pool and assign a work_queue*/
+	struct threadpool *tp = (struct threadpool *)malloc(sizeof(struct threadpool));
+	tp->wq = wq;
 
 	scanf("%d", &num);
 	while (num--) {
 		scanf("%d", &val);
 		add_item(val, wq);
 	}
-
-	display(wq);
-
+	display(tp->wq);
 	printf("\n");
 	return 0;
 }

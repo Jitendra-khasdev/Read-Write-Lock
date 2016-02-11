@@ -1,11 +1,11 @@
-# gcc -o queue workqueue.c  workqueue.h -lpthread
+# gcc -o rw_lock rw_lock.c  workqueue.h -lpthread
 
 HEADERS = workqueue.h
 LIBS = -lpthread
 
-all: readwrite
+all: rw_lock
 
-readwrite: workqueue.o ${LIBS}
+rw_lock: workqueue.o ${LIBS}
 	gcc workqueue.o -o readwrite
 
 workqueue.o: workqueue.c ${HEADERS} ${LIBS}
@@ -13,4 +13,4 @@ workqueue.o: workqueue.c ${HEADERS} ${LIBS}
 
 clean:
 	-rm -f workqueue.o
-	-rm -f 	readwrite
+	-rm -f 	rw_lock

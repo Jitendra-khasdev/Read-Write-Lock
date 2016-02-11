@@ -20,7 +20,7 @@ struct work_queue_t {
 
 struct threadpool {
 	pthread_t threads[NTHREADS];
-	struct work_queue_t wq;     
+	struct work_queue_t *wq;     
 };
 
 

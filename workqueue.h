@@ -57,9 +57,12 @@ int add_item(int op, struct work_queue_t *wq)
 int remove_item(struct work_queue_t *wq)
 {
 	if (wq->rear == NULL)
-		printf("Underflow Condition");
+		return -1;
+
+	
 
 	struct work_item *temp = wq->front;
+	int val = temp->operation;
 
 	if (temp == wq->rear) {
 		wq->front = NULL;
@@ -68,6 +71,8 @@ int remove_item(struct work_queue_t *wq)
 		wq->front = wq->front->next;
 		free(temp);
 	}
+
+	return val;
 }
 
 struct work_queue_t *work_queue()

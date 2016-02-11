@@ -1,11 +1,12 @@
 HEADERS = workqueue.h
+LIBS = -lpthread
 
 all: readwrite
 
-readwrite: workqueue.o 
-	gcc workqueue.o -o readwrite -lpthread -lm
+readwrite: workqueue.o ${LIBS}
+	gcc workqueue.o -o readwrite
 
-workqueue.o: workqueue.c ${HEADERS}
+workqueue.o: workqueue.c ${HEADERS} ${LIBS}
 	gcc workqueue.c -o workqueue.o
 
 clean:

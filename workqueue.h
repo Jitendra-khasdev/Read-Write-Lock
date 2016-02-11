@@ -4,6 +4,7 @@
 
 #define NTHREADS 100
 
+static int  count = 0;
 
 struct work_item {
 	struct work_item *next;
@@ -50,7 +51,7 @@ int add_item(int op, struct work_queue_t *wq)
 		wq->rear->next = add_temp;
 		wq->rear = add_temp;
 	}
-
+	count++;
 	return 0;
 }
 
@@ -71,7 +72,7 @@ int remove_item(struct work_queue_t *wq)
 		wq->front = wq->front->next;
 		free(temp);
 	}
-
+	count--;
 	return val;
 }
 
@@ -97,4 +98,10 @@ int display(struct work_queue_t *wq)
 	
 	return 0;
 }
+
+int len_item()
+{
+	return count;
+}
+
 

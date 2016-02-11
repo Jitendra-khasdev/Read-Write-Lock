@@ -68,12 +68,9 @@ int writer(void *ptr)
  *
  */
 
-void *master_thread()
+void *master_thread(void *ptr)
 {
-
-
-
-
+	printf("Hello I am a thread\n");
 
 }
 
@@ -83,25 +80,7 @@ void *master_thread()
 /*Entry Point*/
 int main()
 {
-	int num, val;
-	/*pthread_t thread[NTHREADS];
-	int i, j, n_thread;
-
-	sem_init(&mutex, 0, 1);
-	sem_init(&wrt, 0, 1);
-
-	printf("Enter Number of Threads\n");
-	scanf("%d", &n_thread);
-
-	for (i = 0; i < n_thread; i++) {
-		pthread_create(&thread[i], NULL, master_thread, (void *)i);
-	}
-
-	for (i = 0; i < n_thread; i++) {
-		pthread_join(thread[i], NULL);
-	}
-	
-	printf("Modified data == %d\n", data);*/
+	int num, val, i, n_thread;
 	
 	/*Create a work to store work item into memory*/
 	struct work_queue_t *wq =  work_queue();
@@ -117,6 +96,17 @@ int main()
 	}
 	display(tp->wq);
 	printf("\n");
+
+	printf("Enter Number of Threads\n");
+        scanf("%d", &n_thread);
+
+        for (i = 0; i < n_thread; i++) {
+                pthread_create(&(tp->threads[i]), NULL, master_thread, (void *)i);
+        }
+
+        for (i = 0; i < n_thread; i++) {
+                pthread_join(tp->threads[i], NULL);
+        }
 	return 0;
 }
 

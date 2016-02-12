@@ -1,4 +1,6 @@
 # gcc -o rw_lock rw_lock.c  workqueue.h -lpthread
+# gcc -Wall -Werror -pthread rw_lock.c  workqueue.h -o rw_lock
+
 
 HEADERS = workqueue.h
 LIBS = -lpthread

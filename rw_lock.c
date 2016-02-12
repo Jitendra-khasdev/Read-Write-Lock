@@ -61,35 +61,32 @@ int writer()
 void *master_thread(void *ptr)
 {
 	int op;
+	//x:
+	while (1) {
+		printf("This is thread no : %d\n", (int)ptr);
+		sem_wait(&mutex);
+		op = remove_item(tp->wq);
+		if (op != -1) {
+			/*Call Read operation*/
+			if (op == 1) {
+				reader();
+			}
+			/*Call Write operation*/
+			if (op == 0) {
+				writer();
+			}
+		}
+		sem_post(&mutex);
 
-	x:
-	printf("This is thread no : %d\n", (int)ptr);
-	sem_wait(&mutex);
-	op = remove_item(tp->wq);
-	
-	if (op != -1) {
-		/*Call Read operation*/
-		if (op == 1) {
-			reader();
-		}
-		/*Call Write operation*/
-		if (op == 0) {
-			writer();
-		}
+		sem_wait(&mutex);
+			if (count != 0) {
+				sem_post(&mutex);
+				goto x;
+			}
+		sem_post(&mutex);
+		pause();
 	}
-	sem_post(&mutex);
-
-	sleep(3);
-	
-	sem_wait(&mutex);
-		if (count != 0) {
-			sem_post(&mutex);
-			goto x;
-		}
-	sem_post(&mutex);
-	
-
-
+	return 0;
 }
 
 /*Entry Point*/

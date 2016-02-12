@@ -3,13 +3,14 @@
  * Date : 10-Feb-2016
  *
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include "workqueue.h"
 
 sem_t			mutex;
@@ -27,10 +28,13 @@ int data = 5;
  */
 int reader()
 {
-	char temp[25];
+	char temp[7];
 	pthread_rwlock_rdlock(&rwlock);
-	//read(fd, &temp, sizeof(temp));
-	//printf("Reader Thread : Data == %s\n", temp);
+	lseek(fd, 0, SEEK_SET);
+	if (read(fd, temp, sizeof(temp)) > 0)
+		printf("Reader Thread : Data == %s\n", temp);
+	else
+		printf("Error while reading\n");
 	sleep(2);	
 	pthread_rwlock_unlock(&rwlock);
 	return 0;
@@ -43,7 +47,9 @@ int writer()
 {
 	pthread_rwlock_wrlock(&rwlock);
 	data++;
-	write(fd, "Writer thread is writing", 24);
+	lseek(fd, 0, SEEK_END);
+	write(fd, "Writer", sizeof("Writer"));
+	printf("Writer Thread : Data == %s\n", "Writer ");
 	sleep(2);
 	pthread_rwlock_unlock(&rwlock);
 	return 0;
@@ -117,7 +123,7 @@ int main()
 
 
 	/*Open a file*/
-	fd = open("shared_resource.txt", O_CREAT | O_WRONLY,  0644);
+	fd = open("shared_resource.txt", O_CREAT | O_RDWR,  0644);
 
 	/*Get the number of threads*/
 	printf("Enter Number of Threads\n");

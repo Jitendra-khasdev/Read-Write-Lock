@@ -5,13 +5,16 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <pthread.h>
 #include <semaphore.h>
 #include "workqueue.h"
 
 sem_t			mutex;
 pthread_rwlock_t	rwlock;
-
+int fd;
 struct threadpool *tp = NULL;
 
 /*
@@ -24,8 +27,10 @@ int data = 5;
  */
 int reader()
 {
+	char temp[25];
 	pthread_rwlock_rdlock(&rwlock);
-	printf("Reader Thread : Data == %d\n", data);
+	//read(fd, &temp, sizeof(temp));
+	//printf("Reader Thread : Data == %s\n", temp);
 	sleep(2);	
 	pthread_rwlock_unlock(&rwlock);
 	return 0;
@@ -38,7 +43,7 @@ int writer()
 {
 	pthread_rwlock_wrlock(&rwlock);
 	data++;
-	printf("Writer Thread : Data == %d\n", data);
+	write(fd, "Writer thread is writing", 24);
 	sleep(2);
 	pthread_rwlock_unlock(&rwlock);
 	return 0;
@@ -110,6 +115,10 @@ int main()
 	display(tp->wq);
 	printf("\n");
 
+
+	/*Open a file*/
+	fd = open("shared_resource.txt", O_CREAT | O_WRONLY,  0644);
+
 	/*Get the number of threads*/
 	printf("Enter Number of Threads\n");
         scanf("%d", &n_thread);
@@ -126,6 +135,9 @@ int main()
 	/*Display the work items*/
 	display(tp->wq);
 	printf("\n");
+
+	/*Close Opened resource*/
+	close(fd);
 	return 0;
 }
 

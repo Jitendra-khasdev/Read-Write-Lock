@@ -32,7 +32,7 @@ void *read_write(void *ptr)
         lseek(read_fd, seek, SEEK_SET);
         if ((block_size = read(read_fd, buffer, SIZE)) > 0) {
                 lseek(write_fd, seek, SEEK_SET);
-                if (write(write_fd, temp, SIZE) == -1)
+                if (write(write_fd, buffer, SIZE) == -1)
                         printf("Error while writing");
         }
 	return 0;
@@ -42,7 +42,6 @@ int main(int argc, char **argv)
 {
 	pthread_t thread_id[NTHREADS];
 	int i, j, num;
-	char buffer[1024];
 
 
 	if (argc != 3) {
@@ -62,8 +61,6 @@ int main(int argc, char **argv)
                 exit(3);
         }
 
-	read(read_fd, buffer, SIZE);
-	printf("%s", buffer);
 
 	scanf("%d", &num);
 	for(i=0; i < num; i++) {

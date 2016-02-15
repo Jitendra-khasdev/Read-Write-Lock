@@ -1,0 +1,18 @@
+ This will give you a list of kernel addresses sorted in ascending
+   order, from which it is simple to find the function that contains the
+   offending address.  Note that the address given by the kernel
+   debugging messages will not necessarily match exactly with the
+   function addresses (in fact, that is very unlikely), so you can't
+   just 'grep' the list: the list will, however, give you the starting
+   point of each kernel function, so by looking for the function that
+   has a starting address lower than the one you are searching for but
+   is followed by a function with a higher address you will find the one
+   you want.  In fact, it may be a good idea to include a bit of
+   "context" in your problem report, giving a few lines around the
+   interesting one. 
+
+   If you for some reason cannot do the above (you have a pre-compiled
+   kernel image or similar), telling me as much about your setup as
+   possible will help.  Please read the REPORTING-BUGS document for details.
+
+ - Alternatively, you can us

@@ -11,29 +11,25 @@
 #define SIZE 1024
 
 
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int offset = 0;
-int base = 0, read_fd, write_fd;
-
+int base = 0, read_fd, write_fd, n_thread;
 void *read_write(void *);
+
 
 void *read_write(void *ptr)
 {
-	char **temp = (char **)ptr;
-	int seek = 0, block_size = 0;
+	int seek = 1024, block_size = 0;
 	char buffer[SIZE];
-	
-	pthread_mutex_lock(&mutex);
-	seek = base;
-	base += offset; 
-	pthread_mutex_unlock(&mutex);
-	
-        lseek(read_fd, seek, SEEK_SET);
-        if ((block_size = read(read_fd, buffer, SIZE)) > 0) {
-                lseek(write_fd, seek, SEEK_SET);
+	int thread_num = (int) ptr;
+	printf("thread number == %d\n", thread_num);
+        lseek(read_fd, seek*thread_num, SEEK_SET);
+        while ((block_size = read(read_fd, buffer, SIZE)) > 0) {
+                lseek(write_fd, seek*thread_num, SEEK_SET);
                 if (write(write_fd, buffer, SIZE) == -1)
                         printf("Error while writing");
+		thread_num += 3;
+        	lseek(read_fd, seek*thread_num, SEEK_SET);
         }
 	return 0;
 }
@@ -64,7 +60,7 @@ int main(int argc, char **argv)
 
 	scanf("%d", &num);
 	for(i=0; i < num; i++) {
-		pthread_create(&thread_id[i], NULL, read_write, (void *)argv);
+		pthread_create(&thread_id[i], NULL, read_write, (void *) i);
 	}
 
 	for(j=0; j < num; j++) {
